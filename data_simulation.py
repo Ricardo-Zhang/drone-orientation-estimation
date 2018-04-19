@@ -46,7 +46,7 @@ def visualize(idx):
         ))
         ax.plot(directions[0],directions[1],directions[2])
     for j in range(num_rx):
-        ax.scatter(GPS_loc[idx,j,0],GPS_loc[idx,j,1],GPS_loc[idx,j,2],c=colors[j])
+        ax.scatter(GPS_loc[idx,j,0],GPS_loc[idx,j,1],GPS_loc[idx,j,2],c=colors[j],marker='*')
         ax.scatter(GPS_loc_noisy[idx,j,0],GPS_loc_noisy[idx,j,1],GPS_loc_noisy[idx,j,2],c=colors[j])
     plt.show()
 
@@ -54,7 +54,7 @@ def visualize(idx):
 N = int(1e3)
 num_rx = 4
 dist = 0.1  # the distance
-noise = 0.2  # Additive Gaussian Noise on GPS rx
+noise = 0.1  # Additive Gaussian Noise on GPS rx
 original_loc = np.array(([dist,dist,0],[dist,-dist,0],[-dist,dist,0],[-dist,-dist,0]))
 drone_loc = np.random.uniform(0,5,(N,3))
 drone_orie = np.random.uniform(-np.pi,np.pi,(N,3))
@@ -66,3 +66,12 @@ for i in range(N):
         GPS_loc[i,j,:] = drone_loc[i,:]+rotate(drone_orie[i],original_loc[j])
         GPS_loc_noisy[i,j,:] = GPS_loc[i,j,:]+np.random.normal(0,noise,3)
 visualize(0)
+path = 'data/'
+GPS_loc_file = 'GPS_Locations.npy'
+GPS_loc_noisy_file = 'Observations.npy'
+drone_loc_file = 'Drone_Locations.npy'
+drone_orie_file = 'Drone_Orientations.npy'
+np.save(path+GPS_loc_file, GPS_loc)
+np.save(path+GPS_loc_noisy_file, GPS_loc_noisy)
+np.save(path+drone_loc_file, drone_loc)
+np.save(path+drone_orie_file, drone_orie)
