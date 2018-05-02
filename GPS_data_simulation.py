@@ -36,7 +36,7 @@ def main():
 
     model = Model(N, rx_num)
     model.diff_calculate(phase)
-
+    
 
 if __name__ == "__main__":
     main()
