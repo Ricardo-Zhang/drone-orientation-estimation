@@ -2,7 +2,7 @@ import numpy as np
 from pyquaternion import Quaternion
 import matplotlib.pyplot as plt
 
-class satelite():
+class Satelite():
     '''
     GPS satellites fly in medium Earth orbit (MEO) at an altitude of approximately 20,200 km
     Operating frequency 1575.42MHz
@@ -13,11 +13,15 @@ class satelite():
         self.wavelength = 3e8/self.frequency
         # self.phase_noise = phase_noise
 
-    def phase_calculate(self, rx_location):
+    def phase_calculate(self, rx_location, phase_noise=0.01):
         distance = np.linalg.norm(self.location-rx_location)
         phase = (distance % self.wavelength)*2*np.pi
-        # phase += np.random.randn * self.phase_noise
+        phase += np.random.randn(*phase.shape) * phase_noise
         return phase
+
+    def line_of_sight(self, drone_location):
+        self.los = self.location-drone_location
+        self.los /= np.sum(self.los)
 
 class Drone():
     '''
@@ -27,22 +31,21 @@ class Drone():
         self.location = location
         self.quaternion = Quaternion(quaternion)
         self.rx = np.zeros((4,3))
-        self.noise_pwr = 0.01
+        self.noise_pwr = noise_pwr
 
     def rotate(self, arm_length):
         self.rx = np.array(([arm_length,0,0],[-arm_length,0,0],[0,arm_length,0],
         [0,-arm_length,0]))
         for i in range(4):
             self.rx[i] = self.quaternion.rotate(self.rx[i])
-            self.rx[i] += np.random.randn(3)*self.noise_pwr
-        self.rx += self.location
+            self.rx[i] += self.location
+            # self.rx[i] += np.random.randn(3)*self.noise_pwr
 
     def phase_calculate(self, satelite):
         phase = np.zeros(4)
         for i in range(4):
             phase[i] = satelite.phase_calculate(self.rx[i])
         return phase
-
 
 class Model():
     '''

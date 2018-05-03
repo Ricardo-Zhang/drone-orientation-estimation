@@ -18,13 +18,20 @@ def main():
     position_data, quaternion_data = load_data()
     print(position_data[0], quaternion_data[0])
     N = len(position_data)
-    satelite_a = satelite(0,0)
-    satelite_b = satelite(1e7,1e7)
+    satelite_a = Satelite(0,0)
+    satelite_b = Satelite(1e7,1e7)
+    satelite_a.line_of_sight(position_data[0])
+    satelite_b.line_of_sight(position_data[0])
+    # the line_of_sight unit vector is approximate as constant vector
+    diff_los = satelite_a.los-satelite_b.los
     rx_num = 4
     arm_len = 0.2 # 0.2 meter from the center to the rx antenna
     '''
     simulating phase based on the data generated
     '''
+    base_drone = Drone(location=(0,0,0),quaternion=(1,0,0,0))
+    base_drone.rotate(arm_length=arm_len)
+    base_matrix = np.array([base_drone.rx[i]-base_drone.rx[0] for i in range(1,rx_num)])
     phase = np.zeros((N,rx_num,2))
     drone_stat = []
     for i in range(N):
@@ -36,7 +43,14 @@ def main():
 
     model = Model(N, rx_num)
     model.diff_calculate(phase)
-    
+    for i in range(1,2):
+        for j in range(rx_num-1):
+            H = np.inner(base_matrix[j],np.cross(drone_stat[i-1].quaternion.rotation_matrix,
+            diff_los))
+            yy = np.inner(np.inner(base_matrix[j],drone_stat[i-1].quaternion.rotation_matrix),diff_los)
+            y = satelite_a.wavelength*model.doubleDiffRxSate[j]
+            print(y-yy)
+
 
 if __name__ == "__main__":
     main()
