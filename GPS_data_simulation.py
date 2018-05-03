@@ -22,6 +22,7 @@ def main():
     satelite_b = Satelite(1e7,1e7)
     satelite_a.line_of_sight(position_data[0])
     satelite_b.line_of_sight(position_data[0])
+    wavelength = satelite_a.wavelength
     # the line_of_sight unit vector is approximate as constant vector
     diff_los = satelite_a.los-satelite_b.los
     rx_num = 4
@@ -48,7 +49,8 @@ def main():
             H = np.inner(base_matrix[j],np.cross(drone_stat[i-1].quaternion.rotation_matrix,
             diff_los))
             yy = np.inner(np.inner(base_matrix[j],drone_stat[i-1].quaternion.rotation_matrix),diff_los)
-            y = satelite_a.wavelength*model.doubleDiffRxSate[j]
+            y = wavelength*model.doubleDiffRxSate[j]
+            wavelength*model.doubleDiffRxTime[i]
             print(y-yy)
 
 
