@@ -3,8 +3,7 @@ from pyquaternion import Quaternion
 import matplotlib.pyplot as plt
 from track_orientation import *
 
-def load_data():
-    path = 'data/'
+def load_data(path):
     position_path = 'position_data.npy'
     quaternion_path = 'quaternion_data.npy'
     position_data = np.load(path+position_path)
@@ -15,9 +14,10 @@ def main():
     '''
     loading data and set configurations
     '''
-    position_data, quaternion_data = load_data()
+    position_data, quaternion_data = load_data('data/')
     print(position_data[0], quaternion_data[0])
     N = len(position_data)
+    # two satelites at (0,0,20200*1000) and (1e7,1e7,20200*1000)
     satelite_a = Satelite(0,0)
     satelite_b = Satelite(1e7,1e7)
     satelite_a.line_of_sight(position_data[0])
@@ -35,24 +35,22 @@ def main():
     base_matrix = np.array([base_drone.rx[i]-base_drone.rx[0] for i in range(1,rx_num)])
     phase = np.zeros((N,rx_num,2))
     drone_stat = []
+    # each drone instance represents a time slot
     for i in range(N):
         drone = Drone(position_data[i],quaternion_data[i])
         drone.rotate(arm_len)
         phase[i,:,0] = drone.phase_calculate(satelite_a)
         phase[i,:,1] = drone.phase_calculate(satelite_b)
         drone_stat.append(drone)
-
+    # system model, calculating all differentials
     model = Model(N, rx_num)
     model.diff_calculate(phase)
     for i in range(1,2):
         for j in range(rx_num-1):
-            H = np.inner(base_matrix[j],np.cross(drone_stat[i-1].quaternion.rotation_matrix,
-            diff_los))
+            H = np.inner(base_matrix[j],np.cross(drone_stat[i-1].quaternion.rotation_matrix,diff_los))
             yy = np.inner(np.inner(base_matrix[j],drone_stat[i-1].quaternion.rotation_matrix),diff_los)
             y = wavelength*model.doubleDiffRxSate[j]
-            wavelength*model.doubleDiffRxTime[i]
-            print(y-yy)
-
+            # wavelength*model.doubleDiffRxTime[i] =
 
 if __name__ == "__main__":
     main()
