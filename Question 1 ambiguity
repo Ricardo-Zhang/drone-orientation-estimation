@@ -1,0 +1,22 @@
+count the number of wavelength which included in distance from the satellite and GPS receiver.
+
+
+
+https://www.tekmon.gr/online-gps-tutorial/1-5-1-physical-meaning-of-ambiguity
+
+GPS carrier-phase measurements can be used to achieve very precise positioning solutions.
+Carrier-phase measurements are much more precise than pseudorange measurements, but they are 
+ambiguous by an integer number of cycles. 
+
+5.1 (from paper mathematically expression )
+Recall from Equation 2 that the Phase Lock Loop (PLL) only measures the fractional part of 
+the range, leaving an un- known of λN. Once the drone is flying, additional multiples of wavelengths
+can also accumulate, called cycle slips. We first describe ways to mitigate the initial λN and discuss 
+cycle slips thereafter.
+Note that we do not need to estimate N since we are not
+computing the actual range (or location) of the GPS receiver.
+Since we only care about orientation, we have been oper-
+ating in the space of differentials. Thus, when we compute
+Ns =Ns −Ns,followedbyNsk =Ns −Nk,werecognize ij i j ij ij ij
+that Nsk are also integers. Our goal is to estimate these Nsk ij ij
+integers, for all combinations of ij and sk.
