@@ -2,10 +2,12 @@
 import rospy
 import numpy as np
 import io, json
+import pickle
 from geometry_msgs.msg import Point, Pose, Quaternion, PoseStamped, TransformStamped, PoseWithCovarianceStamped, Vector3Stamped
 
 position = []
 quaternion = []
+timeslot = []
 count = 0
 
 def callback(pose):
@@ -15,11 +17,11 @@ def callback(pose):
     global count
     posi_array = np.array((pose.pose.position.x,pose.pose.position.y,pose.pose.position.z))
     quat_array = np.array((pose.pose.orientation.x,pose.pose.orientation.y,pose.pose.orientation.z,pose.pose.orientation.w))
-    if len(position) == 0 or (len(position)!= 0 and np.linalg.norm(posi_array - position[-1])>0.1):
-        position.append(posi_array)
-        quaternion.append(quat_array)
-        count += 1
-        print(count)
+    position.append(posi_array)
+    quaternion.append(quat_array)
+    timeslot.append(pose.header.stamp.to_sec())
+    count += 1
+    print(count)
         
 def listener():
     rospy.init_node('listener', anonymous=True)
@@ -37,3 +39,5 @@ finally:
         np.save(p_f, position_array)
     with open("quaternion_data.npy", "w") as q_f:
         np.save(q_f, quaternion_array)
+    with open("time_data.txt", "w") as t_f:
+        pickle.dump(timeslot,t_f)
