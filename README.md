@@ -8,6 +8,12 @@ https://www2.cs.duke.edu/courses/compsci527/fall13/notes/rodrigues.pdf
 ATTITUDE
 https://diydrones.com/forum/topics/open-source-attitude
 
+Rotation Vector:
+http://farside.ph.utexas.edu/teaching/301/lectures/node100.html
+
+Vector Cross Product:
+http://soe.rutgers.edu/%7emeer/GRAD561/ADD/antisymm.pdf
+
 ## Simulator Steps:
 - `source devel/setup.bash`
 - launch the drone with `roslaunch`
