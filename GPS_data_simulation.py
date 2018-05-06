@@ -3,6 +3,8 @@ from pyquaternion import Quaternion
 import matplotlib.pyplot as plt
 from track_orientation import *
 
+c = 3e8
+
 def load_data(path):
     position_path = 'position_data.npy'
     quaternion_path = 'quaternion_data.npy'
@@ -30,9 +32,6 @@ def main():
     '''
     simulating phase based on the data generated
     '''
-    base_drone = Drone(location=(0,0,0),quaternion=(1,0,0,0))
-    base_drone.rotate(arm_length=arm_len)
-    base_matrix = np.array([base_drone.rx[i]-base_drone.rx[0] for i in range(1,rx_num)])
     phase = np.zeros((N,rx_num,2))
     drone_stat = []
     # each drone instance represents a time slot
@@ -42,15 +41,22 @@ def main():
         phase[i,:,0] = drone.phase_calculate(satelite_a)
         phase[i,:,1] = drone.phase_calculate(satelite_b)
         drone_stat.append(drone)
+
+    base_matrix = np.array([drone_stat[0].rx[i]-drone_stat[0].rx[0] for i in range(1,rx_num)])
+
     # system model, calculating all differentials
     model = Model(N, rx_num)
     model.diff_calculate(phase)
-    for i in range(1,2):
-        for j in range(rx_num-1):
-            H = np.inner(base_matrix[j],np.cross(drone_stat[i-1].quaternion.rotation_matrix,diff_los))
-            yy = np.inner(np.inner(base_matrix[j],drone_stat[i-1].quaternion.rotation_matrix),diff_los)
-            y = wavelength*model.doubleDiffRxSate[j]
-            # wavelength*model.doubleDiffRxTime[i] =
-
+    # form the lse problem
+    A = np.inner(base_matrix.dot(drone_stat[1].quaternion.rotation_matrix),satelite_a.los)
+    b = satelite_a.wavelength*model.doubleDiffRxTime[1,:,0]-A
+    x = np.linalg.pinv(base_matrix).dot(b)
+    AA = np.outer(x,satelite_a.los.T)/(satelite_a.los@satelite_a.los.T)
+    AAA = np.zeros((3,3))
+    AAA[:,0] = normalize(np.cross(AA[:,1],AA[:,2]))
+    AAA[:,1] = normalize(np.cross(AA[:,0],AA[:,2]))
+    AAA[:,2] = normalize(AA[:,2])
+    print(AAA)
+    Quaternion(matrix=AAA)
 if __name__ == "__main__":
     main()
