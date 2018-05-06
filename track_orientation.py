@@ -22,7 +22,7 @@ class Satelite():
 
     def line_of_sight(self, drone_location):
         self.los = self.location-drone_location
-        self.los /= np.sum(self.los)
+        self.los /= np.linalg.norm(self.los)
 
 class Drone():
     '''
@@ -79,17 +79,14 @@ class Model():
 def normalize(vector):
     return vector/np.linalg.norm(vector)
 
-
 def quat2vec(quaternion):
-    R = quaternion.rotation_matrix
-    A = (R-R.T)/2
-    ro = np.array([A[2,1],A[0,2],A[1,0]]).T
-    s = np.linalg.norm(ro)
-    c = (R[0,0]+R[1,1]+R[2,2]-1)/2
-    theta = np.arctan2(s,c)
-    if np.sin(theta) != 0:
-        u = ro/s
-        r = u*theta
-    else:
-        r = np.zeros(3)
-    return r
+    ax = quaternion.axis
+    theta = quaternion.angle
+    v = normalize(ax)*theta
+    return v
+
+def vec2quat(rotate_vector):
+    theta = np.linalg.norm(rotate_vector)
+    ax = normalize(rotate_vector)
+    q = Quaternion(axis=ax, radians=theta)
+    return q
