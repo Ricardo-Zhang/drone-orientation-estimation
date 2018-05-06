@@ -2,6 +2,8 @@
 A python's implementation of **Tracking Drone Orientation with Multiple GPS Receivers**  
 http://synrg.csl.illinois.edu/papers/drone-attitude-camera.pdf
 
+https://link.springer.com/chapter/10.1007/978-3-319-67235-9_7
+
 Vector Representation of Rotation:
 https://www2.cs.duke.edu/courses/compsci527/fall13/notes/rodrigues.pdf
 
