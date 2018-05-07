@@ -54,11 +54,13 @@ def main():
     print(position_data[0],quaternion_data[0])
     N = len(position_data)
     # two satelites at (0,0,20200*1000) and (1e7,1e7,20200*1000)
-    satelite_a = Satelite(-1e7,-1e7)
-    satelite_b = Satelite(1e7,1e7)
+    phase_noise = 1e-3
+    satelite_a = Satelite(-1e7,-1e7,phase_noise=phase_noise)
+    satelite_b = Satelite(1e7,1e7,phase_noise=phase_noise)
     satelite_a.line_of_sight(position_data[0])
     satelite_b.line_of_sight(position_data[0])
     wavelength = satelite_a.wavelength
+    noise = wavelength**2*phase_noise
     # the line_of_sight unit vector is approximate as constant vector
     diff_los = satelite_a.los - satelite_b.los
     rx_num = 4
@@ -70,7 +72,7 @@ def main():
     drone_stat = []
     # each drone instance represents a time slot
     for i in range(N):
-        drone = Drone(position_data[i],quaternion_data[i])
+        drone = Drone(position_data[i],quaternion_data[i],rx_num=rx_num)
         drone.rotate(arm_len)
         phase[i,:,0] = drone.phase_calculate(satelite_a)
         phase[i,:,1] = drone.phase_calculate(satelite_b)
@@ -81,10 +83,16 @@ def main():
     model = Model(N,rx_num)
     model.diff_calculate(phase)
 
+    quaternion_est = [drone_stat[0].quaternion]
+
     for i in range(1,10):
         delta_theta = transition_theta_cal(base_mat,drone_stat[i - 1],satelite_a,satelite_b,
                                            model.doubleDiffRxTime[i,:,:])
-        theta = theta_cal(base_mat,drone_stat[i],satelite_a,satelite_b,model.doubleDiffRxSate[i,:])
+        delta_quat = vec2quat(delta_theta)
+        quaternion_est.append(delta_quat*quaternion_est[-1]+np.random.randn(4)*noise)
+        delta_theta_forward = quat2vec(quaternion_est[-1])
+
+        theta = theta_cal(base_mat,drone_stat[i],satelite_a,satelite_b ,model.doubleDiffRxSate[i,:])
 
 
 if __name__ == "__main__":

@@ -7,17 +7,18 @@ class Satelite():
     GPS satellites fly in medium Earth orbit (MEO) at an altitude of approximately 20,200 km
     Operating frequency 1575.42MHz
     '''
-    def __init__(self, x, y):
+    def __init__(self, x, y, phase_noise=1e-3):
         self.location = np.array((x,y,20200*1000))
         self.frequency = 1575.42e6
         self.c = 3e8
         self.wavelength = self.c/self.frequency
+        self.phase_noise = phase_noise
         # self.phase_noise = phase_noise
 
-    def phase_calculate(self, rx_location, phase_noise=0.01):
+    def phase_calculate(self, rx_location):
         distance = np.linalg.norm(self.location-rx_location)
         phase = (distance % self.wavelength)/self.wavelength
-        phase += np.random.randn(*phase.shape) * phase_noise
+        phase += np.random.randn(*phase.shape) * self.phase_noise
         return phase
 
     def line_of_sight(self, drone_location):
@@ -28,23 +29,23 @@ class Drone():
     '''
     Quadcopter with 4 GPS receivers
     '''
-    def __init__(self, location, quaternion, noise_pwr = 0.01):
+    def __init__(self, location, quaternion, rx_num=2, noise_pwr = 0.01):
         self.location = location
         self.quaternion = Quaternion(quaternion)
-        self.rx = np.zeros((4,3)) # receiver locations
+        self.rx_num = rx_num
+        self.rx = np.zeros((rx_num,3)) # receiver locations
         self.noise_pwr = noise_pwr
 
     def rotate(self, arm_length):
-        self.rx = np.array(([arm_length,0,0],[-arm_length,0,0],[0,arm_length,0],
-        [0,-arm_length,0]))
-        for i in range(4):
+        self.rx = np.array(([arm_length,0,0],[-arm_length,0,0],[0,arm_length,0],[0,-arm_length,0]))
+        for i in range(self.rx_num):
             self.rx[i] = self.quaternion.rotate(self.rx[i])
             self.rx[i] += self.location
             # self.rx[i] += np.random.randn(3)*self.noise_pwr
 
     def phase_calculate(self, satelite):
-        phase = np.zeros(4)
-        for i in range(4):
+        phase = np.zeros(self.rx_num)
+        for i in range(self.rx_num):
             phase[i] = satelite.phase_calculate(self.rx[i])
         return phase
 
