@@ -594,6 +594,8 @@ time can be subtracted (or differenced) to eliminate some of these factors.
 Similarly, simultaneous measurements from multiple GPS receivers can also be
 differenced. [4] This study propose 4 kind of differentials.
 \subsubsection{Single Differential across Receivers ($SD_{ij}^s(t)$)}
+
+Consider the carrier phase equations for two GPS receivers i and j from the same satellite s (let us ignore multipath and noise).
 \begin{equation}
   \begin{split}
     \lambda \bigtriangleup \phi_{ij}^s &= \phi_{i}^s - \phi_{j}^s\\
@@ -619,6 +621,8 @@ The equation then become:
 \begin{equation}
   \lambda \bigtriangleup \phi_{ij}^s = \rho_{ij}\cdot \hat{l}_s + c\bigtriangleup t_{ij} - \lambda N_{ij}
 \end{equation}
+
+While by single differential equation, some errors have disappeared,there still exits a function of the clock bias errors, $c\bigtriangleup t_{ij}$ still remains, this call the need for double differentials.
 
 \subsubsection{Double Differential across Receivers and Satellites ($DD_{ij}^{sk}(t)$)}
 \begin{equation}
