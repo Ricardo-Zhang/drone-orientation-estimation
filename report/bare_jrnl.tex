@@ -838,7 +838,13 @@ The Kalman and Adjusted Particle filter is performed on the simulated data.
 
 
 \section{Conclusion}
-The conclusion goes here.
+We compared the performance of Kalman Filters and Advanced Particle Filter. The result shows that 
+Advanced Particle Filters performed can better track the drone than Kalman Filter. The reason canbbe listed as below:
+\item SafetyNet adopts a hybrid approach to satisfy the linearity and Gaussian assumptions required for KF.
+\item Missing data in one or more of the receivers derails the state transition function.
+\item When the confidence is low, Kalman filter used "grid search" to find the best q_i, this method does not contact the information from the previous time point and the following time point , and assume there is only one time point in the cycle slips period. However, Advanced Particle Filters,it combines the information from the previous time point and the following time point, and do not forcefully assign there is only one time point in cycle slips period.
+
+In conclusion, Advanced Particle Filters has better performance than Kalman Filters. 
 
 
 
