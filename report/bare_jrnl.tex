@@ -476,8 +476,8 @@ of Electrical and Computer Engineering, Cornell Tech}% <-this % stops a space
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
 \IEEEPARstart{W}{ithout} a good awareness of orientation and balance, a drone
-cannot effectively controll its rotors to achieve desired flying status.
-A natural response is to install redundant inertial measurement units (IMU).
+cannot effectively controll its rotors to achieve desired flying status – even hovering becomes impossible.
+A popular response is to install redundant inertial measurement units (IMU).
 IMU is an electronic device that measures and reports a body's specific force,
 angular rate, and the magnetic field surrounding the body, using a combination
 of accelerometers and gyroscopes, sometimes also magnetometers.\\
@@ -491,33 +491,33 @@ Various noise sources, including motor vibration, electromagnetic interference,
 and ambient ferromagnetic influences, create unreliablity for the IMU. Worse even,
 the errors would accumulate through time and the IMUs are prone to various types of
 correlated failures.\\
-The SafetyNet is a fail-safe mechanism for IMU failures. The basic idea is using
+This paper developed SafetyNet, whihc is a fail-safe mechanism for IMU failures. The basic idea is using
 multiple GPS to track 3D orientation of the UAV. The SafetyNet design includes 4 GPS
-receivers at four arms of the single drone – upon IMU failure, we utilize these
-GPS receivers to estimate the drone’s 3D orientation.
+receivers at four arms of the single drone – upon IMU failure, this paper utilize these
+GPS receivers to estimate the drone’s 3D orientation.\\
 As an alternative to the IMUs, SafetyNet uses GPS signals to estimate the real time
 orientation of the drone without any inertial or magnetometer assistance.
-Chanllenge comes that the traditional GPS system iccurs an error around $2~3$ meters
+Chanllenge comes that the traditional GPS system gets an error around $2~3$ meters
 and the more advanced Differential GPS technology would still have a relative error
 in the scale of $10~20$ centimeters (which equals to 20 degree in orientation).
-However, opportunities exist in relative GPS signal information and we aim to utilize
+However, opportunities exist in relative GPS signal information and this paper utilize
 the spatio-temporal information to achieve better accuracy.\\
 The core additions of the SafetyNet, can be distilled as follows:
 \begin{itemize}
   \item Manipulating measurements across pairs of GPS receivers, satellites, and
   consecutive time points, capture 3D orientation from two different perspective,
-  which can institute transition model and measurement model of Kalman filter.
+  which can institute transition model and measurement model of filters.
   \item GPS carrier-phase measurements can be used to achieve very precise positioning
   solutions. Carrier-phase measurements are much more precise than pseudorange
-  measurements, but they are ambiguous by an integer number of cycles. GPS phase
-  measurements are composed of an unknown portion, called “integer ambiguity”.
+  measurements, but they are ambiguous by an integer number of cycles. The integer number of cycles is an unkown portion of GPS phase
+  measurements, called “integer ambiguity”.\\
   In attempting to resolve this ambiguity, past work have adopted techniques akin
-  to “hard decoding”, where the most likely state-estimate is propagated across
-  time. We design the equivalent of “soft decoding”, whereby top-K possibilities
-  of the ambiguity are propagated, each associated with an inferred probability.
+  to “hard decoding”, where the most likely state estimate is propagated across
+  time. This paper design the equivalent of “soft decoding”, whereby top-K possibilities
+  of the ambiguity are propagated, each associated with an inferred probability.\\
   A particle filter is used to execute this idea – the particle filter degenerating
   back into the Kalman Filter when the ambiguity is resolved confidently.
-  \item We break away from the classical particle filter approach and “adjust”
+  \item This paper break away from the classical particle filter approach and “adjust”
   the state of the particles based on available measurements. This speeds up
   convergence of the system, while requiring fewer particles (considerably
   reducing the computational complexity). As a result, the overall SafetyNet
@@ -547,7 +547,7 @@ where $\rho_{ij}$ is the vector between receiver $i$ and $j$
 \end{figure}
 \subsection{Pseudorange}
 Generally, the GPS operates in measuring the the time difference between transmitter
-and receiver and the Pseudorange, which is the estimated distance between both ends
+and receive人， also the Pseudorange, which is the estimated distance between both ends
 is formed as in equation \ref{p-range}.
 \begin{equation}
   Pseudorange = ToF * c
@@ -561,7 +561,7 @@ of a typical GPS receiver is not synchronized to the GPS satellites.
 The resulting error can be up to 300 km. GPS signal can get delayed when it enters
 the Earth’s atmosphere because of refractions in the Ionosphere and Troposphere.
 When signal passes through a multipath channel, more errors would be introduced.
-In our study, we model the error in pseudorange at receiver $i$ from the satellite
+In this study, we model the error in pseudorange at receiver $i$ from the satellite
 $s$ as in equation \ref{Pseudorange-model}.
 \begin{equation}
   Pseudorange_i^s = \rho_i^s + ct_i - ct^s + A^s + M_i + \epsilon_i^s
@@ -579,13 +579,13 @@ The differential GPS technology leverages the phase of received GPS signals to i
 the accuracy. One advantage of carrier phase is that its changes over time can
 be tracked reliably by utilizing the doppler shift in the signals.\\
 The phase model is shown in equation \ref{phase-model} by ignoring the
-multipath and hardware noise error.
+multipath and hardware noise error. Another advantage of carrier phase is that its changes over time can be tracked reliably by utilizing the doppler shift in the signal.
 \begin{equation}
   \lambda\phi_i^s = \rho_i^s + ct_i - ct^s + A^s - N_i^s
   \label{phase-model}
 \end{equation}
-One advantage of carrier phase is that its changes over time can be tracked reliably by utilizing the doppler shift in the signal.While $N_i^s$ is Integer Ambiguity，the number of whole cycles on the path from satellite to receiver.[3] The unknown property of $N_i^s$ is called as
-solve from the phase measurement, and estimating the integer ambiguity is one of our major
+While $N_i^s$ is Integer Ambiguity，the number of whole cycles on the path from satellite to receiver.[3] The unknown property of $N_i^s$ is called integer ambigity
+solve from the phase measurement, and estimating the integer ambiguity is one of the major
 concern in the SafetyNet implementation. More discussion on integer ambiguity
 would come in later sections.\\
 Environmental error sources in Equation 3 are correlated over short time periods
@@ -634,8 +634,9 @@ While by single differential equation, some errors have disappeared,there still 
 \end{equation}
 
 In this equation, i and j represents two different receivers, and k represents one satellite.
-Subtracting the single differential, we have double differential, the the clock biases is removed and the absolute orientation
-is achieved, but the residue is polluted by integer ambiguity. In this study, the spatio double differential
+Subtracting the single differential, we get double differential, the the clock biases is removed and the absolute orientation
+is achieved, but the residue is polluted by integer ambiguity. \\
+In this study, the spatio double differential
 forms our measurement model in the filtering process. This paper assume the ambiguities are magically fixed, this provides us a reasonably precise estimate of relative positions between receiver pairs. The technology of Real Time Kinematics (RTK) technology can use the accurately known location of the reference receiver to calculate the location of the other.
 \subsubsection{Single Differential across Time ($SD_{i}^{s}(t_{12})$)}
 This paper also perform differentials across time for the same receiver. When there is no cycle slips, the equation can be listed as below,
