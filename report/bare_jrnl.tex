@@ -812,7 +812,7 @@ The system diagram is shown in figure \ref{APF}.
   \centering
   \captionsetup{justification=centering}
   \includegraphics[width=0.6\textwidth]{fig/APF.png}
-  \caption{Adjusted Particle Filter}
+  \caption{Advanced Particle Filter}
   \label{APF}
 \end{figure}
 \section{Simulation}
@@ -835,7 +835,7 @@ Two satellites are fixed on the Medium Earth Orbit and the phases are simulated
 from the corresponding distance between the satellite and the receiver.\\
 As the drone's movement is relatively ignorable comparing to the distance to the
 satellites, the line-of-sight vector is considered as constant.\\
-The Kalman and Adjusted Particle filters are performed on the simulated data.
+The Kalman and Advanced Particle filters are performed on the simulated data.
 
 \section{Real World Applications}
 With the booming applications with unmanned autonomos vechicle, reliable orientation
@@ -855,12 +855,19 @@ lens is another application benefits from the accuracy.
 
 \section{Conclusion}
 We compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters
-and Advanced Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight, Advanced Particle Filters can better track the drone than Kalman Filter. And after the highly aggressive flight, Kalman Fliter has large deviation, while Advanced Particle Filters still performs well.
-The reason canbbe listed as below:
+and Advanced Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight,
+Advanced Particle Filters can better track the drone than Kalman Filter. And after the highly aggressive flight,
+Kalman Fliter has large deviation, while Advanced Particle Filters still performs well.
+The reason can be listed as below:
 \begin{itemize}
 \item SafetyNet adopts a hybrid approach to satisfy the linearity and Gaussian assumptions required for Kalman Filter.
 \item Missing data in one or more of the receivers derails the state transition function.
-\item When the confidence is low, Kalman filter used "grid search" to find the best q_i, this method does not contact the information from the previous time point and the following time point , and assume there is only one time point in the cycle slips period. However, Advanced Particle Filters,it combines the information from the previous time point and the following time point, and do not forcefully assign there is only one time point in cycle slips period.
+\item When the confidence is low, Kalman filter used "grid search" to find the best $q_i$,
+this method does not make use of the information from the previous time point and the following time point,
+and assume there is only one time point in the cycle slips period.
+In comparison, Advanced Particle Filters combines the information from the
+previous time point and the following time point, and do not forcefully assign
+there is only one time point in cycle slips period.
 \end{itemize}
 
 In conclusion, Advanced Particle Filters has better performance than Kalman Filters.
