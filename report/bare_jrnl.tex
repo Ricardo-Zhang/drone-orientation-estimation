@@ -798,7 +798,7 @@ maximizes the likelihood,and then perform the resampling step. Thus, the net out
 faster convergence for the correct ambiguities, while disappearing particles for incorrect
 ambiguities.
 
-\item Until it coverage, and if the cosmetric close to 1, we switch back to Kalman
+\item Upon its convergence, and if the cosmetric close to 1, we switch back to Kalman
 filter again.  If the cosmetric is much lower than 1,more particles are added
 and resampled – resampling is performed such that the resulting particles are
 an equal mix of the (highest weighted) current and new particles, and continuing
@@ -832,10 +832,23 @@ Two satellites are fixed on the Medium Earth Orbit and the phases are simulated
 from the corresponding distance between the satellite and the receiver.\\
 As the drone's movement is relatively ignorable comparing to the distance to the
 satellites, the line-of-sight vector is considered as constant.\\
-The Kalman and Adjusted Particle filter is performed on the simulated data.
+The Kalman and Adjusted Particle filters are performed on the simulated data.
 
 \section{Real World Applications}
-
+With the booming applications with unmanned autonomos vechicle, reliable orientation
+estimation has been a nontrivial concern. SafetyNet proposes the novel algorithm
+to track the orientation with multiple GPS receivers to promise an error of 2 degrees
+in environment where magnetic interference and acceleration error accumulates.\\
+The reliablity and the accuracy of SafetyNet make it suitable in two major areas of
+applications.\\
+\paragraph{Reliablity} in the estimation makes it suitable for large quatercopters in aggressive
+flying status and in highly interfered magnetic field. Typical applications include
+flying in urban area (interference in magnetic field), obstacle avoidance in high
+speed flight (error in accelerometers), etc. \\
+\paragraph{Accuracy} in orientation estimation powers up the accuracy in
+autonomos controll algorithms. For example, accurate tracking of the camera pose make it possible
+to achieve better vision-based antonomos flying. 3D reconstruction from the drone's
+lens is another application benefits from the accuracy.
 
 \section{Conclusion}
 The conclusion goes here.
