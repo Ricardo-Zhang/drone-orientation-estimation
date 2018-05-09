@@ -632,19 +632,25 @@ While by single differential equation, some errors have disappeared,there still 
     &= \rho_{ij}\cdot (\hat{l}_s-\hat{l}_k) - \lambda \bigtriangledown \bigtriangleup N_{ij}^{sk}
   \end{split}
 \end{equation}
-With the double differential, the clock error is further removed and the absolute orientation
-is achieved, but polluted by integer ambiguity. In this study, the spatio double differential
-forms our measurement model in the filtering process.
+
+In this equation, i and j represents two different receivers, and k represents one satellite.
+Subtracting the single differential, we have double differential, the the clock biases is removed and the absolute orientation
+is achieved, but the residue is polluted by integer ambiguity. In this study, the spatio double differential
+forms our measurement model in the filtering process. This paper assume the ambiguities are magically fixed, this provides us a reasonably precise estimate of relative positions between receiver pairs. The technology of Real Time Kinematics (RTK) technology can use the accurately known location of the reference receiver to calculate the location of the other.
 \subsubsection{Single Differential across Time ($SD_{i}^{s}(t_{12})$)}
-Similar to differentials across receivers and satellites, we can also perform
-differentials across time for the same receiver.
+This paper also perform differentials across time for the same receiver. When there is no cycle slips, the equation can be listed as below,
 \begin{equation}
   \lambda \bigtriangleup \phi_{i}^s(t_{12}) = \rho_i(t_{12}) \cdot \hat{l}_s + ct_i(t_{12})
 \end{equation}
+
+Measurements across 4 satellites can help jointly estimate the relative displacement and clock bias. This
+estimated relative displacement is quite accurate since the integer ambiguity N_i^s does not included in it. This paper used
+a static receiver placed on the ground to verify the accrancy, and find that the estimation resulted in about 1 cm/s of motion.
+
 \subsubsection{Double Differential across Receivers and Time ($DD_{ij}^s(t_1t_2)$)}
 By taking the difference between the two single differentials across time,
-we achieved a measurement the change in orientation, totally unpolluted by integer ambiguity.
-This measurement forms the system transition model in the filtering process.
+this paper achieved a measurement of the change in orientation, totally unpolluted by integer ambiguity.
+This measurement forms the system transition model in the filtering process. Under the no cycle slips assumption,the interger ambiguity can be elimilated by substracting two equation of single defferential across time.
 \begin{equation}
   \begin{split}
   \lambda \bigtriangledown \bigtriangleup \phi_{ij}^{s}(t_{12})
@@ -654,6 +660,9 @@ This measurement forms the system transition model in the filtering process.
 \end{equation}
 
 \section{System Model}
+
+SafetyNet treat model orientation tracking as a state estimation problem, where the state is defined as 3D orientation and
+represent by quaternion.
 With both the temporal and spatial differentials, we are able to model the orientation
 estimation problem by forming the transition state and absolute measurements.
 The system diagram is provided in figure \ref{model}.\\
@@ -731,6 +740,9 @@ where:
   H = \rho_{ij}(q_0)[A(q_n)\cdot(\hat{l}_s-\hat{l}_k)]_{\times}
 \end{equation}
 and $v_{k+1}$ is the measurement noise.\\
+
+The above EKF has been designed under the convenient assumption that integer ambiguity and cycle slips have been resolved.
+However, this resolution is challenging, as evident from the numerous papers written on this topic.[5-7]
 The transition model and measurment model can now be combined using an
 Extended Kalman Filter for a refined estimate of $\theta^{k+1}$.\\
 In the measurement model, the integer ambiguity still exists.
@@ -854,7 +866,8 @@ to achieve better vision-based antonomos flying. 3D reconstruction from the dron
 lens is another application benefits from the accuracy.
 
 \section{Conclusion}
-We compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters
+
+SafeNet use differential techniques, culminating in a novel particle filter framework running over multi-GNSS systems (GPS, GLONASS, and SBAS) to accurately computing the relative locations between each receiver pair, and translating these measurements into the drone’s 3D orientation.Results from 11 sessions of 5-7 minute flights report median orientation accuracies of 2  even under overcast weather conditions. The two filtering algorism used in the paper are Kalman filter and particle filter, we compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters
 and Advanced Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight,
 Advanced Particle Filters can better track the drone than Kalman Filter. And after the highly aggressive flight,
 Kalman Fliter has large deviation, while Advanced Particle Filters still performs well.
@@ -940,30 +953,24 @@ In conclusion, Advanced Particle Filters has better performance than Kalman Filt
 \begin{thebibliography}{1}
 \bibitem{IEEEhowto:kopka}
 IMU:"https://en.wikipedia.org/wiki/Inertial_measurement_unit"
-\end{thebibliography}
 
-
-\begin{thebibliography}{2}
-
-\bibitem{IEEEhowto:kopka}
 Mahan~thGowda, Justin~Manweiler, Ashutosh~Dhekne, Romit~Roy~Choudhury, and Justin~D.~Weisz, \emph{Tracking Drone Orientation with Multiple GPS Receivers},\hskip 1em plus
-  0.5em minus 0.4em\relax , USA, 2016.
+  0.5em minus 0.4em\relax USA, 2016.
 
-\end{thebibliography}
-
-\begin{thebibliography}{3}
-
-\bibitem{IEEEhowto:kopka}
 E. Kaplan and C. Hegarty,\emph{Understanding GPS: principles and applications},\hskip 1em plus
   0.5em minus 0.4em\relax ,Artech house, 2005.
 
-\end{thebibliography}
 
-\begin{thebibliography}{4}
-
-\bibitem{IEEEhowto:kopka}
 B. W. Parkinson and P. K. Enge,\emph{"Differential gps,” Global Positioning System: Theory and applications.},\hskip 1em plus
   0.5em minus 0.4em\relax ,vol.~2,~pp.~3–50,~1996.
+  
+C. E. Cohen and B. W. Parkinson, “Integer ambiguity resolution of the gps carrier for spacecraft attitude determination,” in Guidance and Control 1992, vol. 1, pp. 107–118, 1992.
+
+A. Conway, P. Montgomery, S. Rock, R. Cannon, and B. Parkinson, “A new motion-based algorithm for gps attitude integer resolution,” Navigation, vol. 43, no. 2, pp. 179–190, 1996.
+
+P. De Jonge and C. Tiberius, “The lambda method for integer ambiguity estimation: implementation aspects,” Publications of the Delft Computing Centre, LGR-Series, vol. 12, no. 12, pp. 1–47, 1996.
+
+E. Sutton and R. Collins, “Calibration of differential phase map compensation using single axis rotation,” in PROCEEDINGS OF ION GPS, vol. 11, pp. 1831–1842, INSTITUTE OF NAVIGATION, 1998.
 
 \end{thebibliography}
 
