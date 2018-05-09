@@ -483,7 +483,7 @@ angular rate, and the magnetic field surrounding the body, using a combination
 of accelerometers and gyroscopes, sometimes also magnetometers.\\
 IMUs are typically used to maneuver aircraft, including unmanned aerial vehicles
 (UAVs), among many others, and spacecraft, including satellites and landers.
-Recent developments allow for the production of IMU-enabled GPS devices.\\
+Recent developments allow for the production of IMU-enabled GPS devices.[1]\\
 An IMU allows a GPS receiver to work when GPS-signals are unavailable,
 such as in tunnels, inside buildings, or when electronic interference is present.
 Unfortunately, redundancy only addresses unreliable hardware.
@@ -521,7 +521,7 @@ The core additions of the SafetyNet, can be distilled as follows:
   the state of the particles based on available measurements. This speeds up
   convergence of the system, while requiring fewer particles (considerably
   reducing the computational complexity). As a result, the overall SafetyNet
-  system lends itself to real time operation on today’s drone hardware.
+  system lends itself to real time operation on today’s drone hardware.[2]
 \end{itemize}
 
 \section{Problem Formulation}
@@ -838,14 +838,16 @@ The Kalman and Adjusted Particle filter is performed on the simulated data.
 
 
 \section{Conclusion}
-We compared the performance of Kalman Filters and Advanced Particle Filter. The result shows that 
-Advanced Particle Filters performed can better track the drone than Kalman Filter. The reason canbbe listed as below:
+We compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters
+and Advanced Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight, Advanced Particle Filters can better track the drone than Kalman Filter. And after the highly aggressive flight, Kalman Fliter has large deviation, while Advanced Particle Filters still performs well.  
+The reason canbbe listed as below:
+\begin{itemize}
 \item SafetyNet adopts a hybrid approach to satisfy the linearity and Gaussian assumptions required for KF.
 \item Missing data in one or more of the receivers derails the state transition function.
 \item When the confidence is low, Kalman filter used "grid search" to find the best q_i, this method does not contact the information from the previous time point and the following time point , and assume there is only one time point in the cycle slips period. However, Advanced Particle Filters,it combines the information from the previous time point and the following time point, and do not forcefully assign there is only one time point in cycle slips period.
 
 In conclusion, Advanced Particle Filters has better performance than Kalman Filters. 
-
+\end{itemize}
 
 
 
@@ -913,13 +915,34 @@ In conclusion, Advanced Particle Filters has better performance than Kalman Filt
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
+\bibitem{IEEEhowto:kopka}
+IMU:"https://en.wikipedia.org/wiki/Inertial_measurement_unit"
+\end{thebibliography}
+
+
+\begin{thebibliography}{2}
 
 \bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+Mahan~thGowda, Justin~Manweiler, Ashutosh~Dhekne, Romit~Roy~Choudhury, and Justin~D.~Weisz, \emph{Tracking Drone Orientation with Multiple GPS Receivers},\hskip 1em plus
+  0.5em minus 0.4em\relax , USA, 2016.
 
 \end{thebibliography}
 
+\begin{thebibliography}{3}
+
+\bibitem{IEEEhowto:kopka}
+E. Kaplan and C. Hegarty,\emph{Understanding GPS: principles and applications},\hskip 1em plus
+  0.5em minus 0.4em\relax ,Artech house, 2005.
+
+\end{thebibliography}
+
+\begin{thebibliography}{4}
+
+\bibitem{IEEEhowto:kopka}
+B. W. Parkinson and P. K. Enge,\emph{"Differential gps,” Global Positioning System: Theory and applications.},\hskip 1em plus
+  0.5em minus 0.4em\relax ,vol.~2,~pp.~3–50,~1996.
+
+\end{thebibliography}
 
 % biography section
 %
