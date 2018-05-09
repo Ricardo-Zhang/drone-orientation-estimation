@@ -523,6 +523,26 @@ The core additions of the SafetyNet, can be distilled as follows:
 \end{itemize}
 
 \section{Problem Formulation}
+\subsection{Drone Model}
+In this study, the drone is modelled with 4 GPS receivers installed on its 4 arms
+with a distance of 10 centimeters to the center.
+Therefore, a baseline matrix is generated as shown in figure \ref{drone} to
+model the ground truth relation between different receivers at different states.\\
+The baseline matrix has the form:
+\begin{equation}
+  B = \begin{bmatrix}\rho_{41}& \rho_{42}& \rho_{43}\end{bmatrix}
+\end{equation}
+where $\rho_{ij}$ is the vector between receiver $i$ and $j$
+\begin{equation}
+  \rho_{ij} = \rho_{i} - \rho_{j}
+\end{equation}
+\begin{figure}
+  \centering
+  \captionsetup{justification=centering}
+  \includegraphics[width=0.6\textwidth]{fig/drone.png}
+  \caption{Baseline Matrix}
+  \label{drone}
+\end{figure}
 \subsection{Pseudorange}
 Generally, the GPS operates in measuring the the time difference between transmitter
 and receiver and the Pseudorange, which is the estimated distance between both ends
@@ -628,13 +648,40 @@ This measurement forms the system transition model in the filtering process.
   \end{split}
 \end{equation}
 
-\subsection{System Model}
-
+\section{System Model}
+With both the temporal and spatial differentials, we are able to model the orientation
+estimation problem by forming the transition state and absolute measurements.
+The system diagram is provided in figure \ref{model}.\\
+\begin{figure}
+  \centering
+  \captionsetup{justification=centering}
+  \includegraphics[width=0.6\textwidth]{fig/model.png}
+  \caption{System Model}
+  \label{model}
+\end{figure}
+\subsubsection{Transition State}
+The temporal differential provides an accurate estimation upon the transition state
+as the integer ambiguity is cancelled. By minimizing the relative clock error, we
+can solve the equation to track the orientation change $\delta q$ between states.
+Here we introduced the 3-dimensional vector representation of orientation $\delta \theta$
+whose magnitude is the angle it rotates and direction is the axis it rotates around.
+By changing the representation metric, we are able to get rid of the constraint from
+quaternion and the estimation becomes a simple Least Square problem:
+\begin{equation}
+  \lambda \bigtriangledown \bigtriangleup \phi_{ij}^{s}(t_{12})
+  = \rho_{ij}(q_0)[A(q_1)\hat{l}_s]_{\times}\delta \theta + c\bigtriangleup t_{ij}(t_{12})
+\end{equation}
+The solved $\delta \theta$ cannot be directly applied for transition state as the
+computation of rotation vector is not immuteable in large scale. We convert it back to
+quaternion form and the transition state becomes:
+\begin{equation}
+  q_{k+1} = \delta q \bigotimes q_{k}
+\end{equation}
+\subsubsection{Absolute State}
+The spatial differential is transformed as our absolute measurement at each state.
 
 \section{Algorithms}
-
 \subsection{Extended Kalman Filter}
-
 In our case, since the transition function is intrinsically nonlinear
 (because of the conversion from rotation matrices to quaternions),
 we make linearized approximations using Extended Kalman Filter (EKF).
