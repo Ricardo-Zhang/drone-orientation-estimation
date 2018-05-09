@@ -635,34 +635,45 @@ This measurement forms the system transition model in the filtering process.
 
 \subsection{Extended Kalman Filter}
 
-In our case, since the transition function is intrinsically nonlinear (because of the conversion from rotation matrices to quaternions), we make linearized approximations using Extended Kalman Filter (EKF). Now, linearizing transition model around the estimated rotation vector associated with quaternion qk, we have:
-
-
-As with the transition function above, the measurement function can be written in the following form:[30]
-
-The transition model and measurment model can now be combined using an Extended Kalman Filter for a refined estimate of \theta^(k+1).
-
-In the measurement model, exists  an unknown of N, integer ambiguity. Once the drone is flying, additional multiples of wavelengths can also accumulate, called cycle slips. This paper first describe ways to mitigate the initial N and discuss cycle slips thereafter.
-
-So, this paper did not measure integer ambiguity directly, but make it as an index to identify the estimation they got is correct or not. Their core intuition is to compute a Cos function on the value of \2piN_sk,which called cosmetric; since Nsk should be an integer, Cos(2piN_sk^ij) should equal 1.
+In our case, since the transition function is intrinsically nonlinear
+(because of the conversion from rotation matrices to quaternions),
+we make linearized approximations using Extended Kalman Filter (EKF).
+Now, linearizing transition model around the estimated rotation vector
+associated with quaternion $q_k$, we have:\\
+As with the transition function above, the measurement function can be written
+in the following form:[30]\\
+The transition model and measurment model can now be combined using an
+Extended Kalman Filter for a refined estimate of $\theta^(k+1)$.\\
+In the measurement model, the integer ambiguity still exists.
+Once the drone is flying, additional multiples of wavelengths can also accumulate,
+called cycle slips. This paper first describe ways to mitigate the initial N and
+discuss cycle slips thereafter.\\
+So, this paper did not measure integer ambiguity directly, but make it as an index
+to identify the estimation they got is correct or not. Their core intuition is
+to compute a Cos function on the value of $2\pi N_{ij}^{sk}$,
+since $N_{sk}$ should be an integer, $Cos(2\pi N_{sk}^{ij})$ should equal to 1.
 
 So, the process to use Kalman filter is listed as below:
-\subsubsection Using transition model to get estimation of the next time point:q2 hat.
-\subsubsection Using measurement model to get the estimation of integer ambiguity. In an ideal case, the correct q should make
-the corresponding values of Nijsk   equal to 1;Then using cosmetiric function to identify the integer ambiguity is correct or not. 
-\subsubsection If the integer ambiguity is correct, then we can use kalman filter to estimate the state.
-\subsubsection If the integer ambiguity is not correct, this paper used a method called “grid search” to search the correct q2 hat.
+\begin{itemize}
+
+\item Using transition model to get estimation of the next time point:q2 hat.
+\item Using measurement model to get the estimation of integer ambiguity. In an ideal case, the correct q should make
+the corresponding values of $N_{ij}^{sk}$   equal to 1;Then using cosmetiric function to identify the integer ambiguity is correct or not.
+\item If the integer ambiguity is correct, then we can use kalman filter to estimate the state.
+\item If the integer ambiguity is not correct, this paper used a method called “grid search” to search the correct q2 hat.
 This method aims to search across all values of q at the granularity of 5 degrees and pick a qcoarse, which maximum the cosmetric. After that, we update the previous q with qcoarse, and go back to step 2.
+\end{itemize}
 
 \subsection{Advanced Particle Filter}
 there exists one phenomenon called cycle slips, A cycle slips causes a jump in carrier-phase measurements when the receiver phase tracking loops experience a temporary loss of lock due to signal blockage or some other disturbing factor.It usually happens with highly aggressive flight drone. The process is listed as follows:
+\begin{itemize}
+\item Using kalman filtering, we can calculate the cosmetric of each $q_i$
+\item if the cosmetric is lower than one, which means the confidence is verified as low, we switch from kalman filter to particle filter to solve the integer ambiguity problem. We select K values of orientation q – the values whose corresponding Cos metric ranks in the top-K. We initialize K particles( from grid search with the top k confidence in cosmetric form) at each of these orientation states and update them via the transition model and measurement model.
 
-\subsubsection Using kalman filtering, we can calculate the cosmetric of each q_i
-\subsubsection if the cosmetric is lower than one, which means the confidence is verified as low, we switch from kalman filter to particle filter to solve the integer ambiguity problem. We select K values of orientation q – the values whose corresponding Cos metric ranks in the top-K. We initialize K particles( from grid search with the top k confidence in cosmetric form) at each of these orientation states and update them via the transition model and measurement model.
+\item All things goes well, however, there is one problem of the slow convergence of particle filter. To solve this, this paper develope one advanced particle filter. In simple particle filter, we propagate to the next stage by transition model,and we weight them by the measurement model, and assign probability for later use for filtering and so on. This paper make a simple modification, they move the particle to a state that maximizes the likelihood,and then perform the resampling step. Thus, the net outcome is faster convergence for the correct ambiguities, while disappearing particles for incorrect ambiguities.
 
-\subsubsection All things goes well, however, there is one problem of the slow convergence of particle filter. To solve this, this paper develope one advanced particle filter. In simple particle filter, we propagate to the next stage by transition model,and we weight them by the measurement model, and assign probability for later use for filtering and so on. This paper make a simple modification, they move the particle to a state that maximizes the likelihood,and then perform the resampling step. Thus, the net outcome is faster convergence for the correct ambiguities, while disappearing particles for incorrect ambiguities.
-
-\subsubsection Until it coverage, and if the cosmetric close to 1, we switch back to Kalman filter again.  If the cosmetric is much lower than 1,more particles are added and resampled – resampling is performed such that the resulting particles are an equal mix of the (highest weighted) current and new particles, and continuing the particle filtering process until the cosmetric close to one, and we go back to step one.
+\item Until it coverage, and if the cosmetric close to 1, we switch back to Kalman filter again.  If the cosmetric is much lower than 1,more particles are added and resampled – resampling is performed such that the resulting particles are an equal mix of the (highest weighted) current and new particles, and continuing the particle filtering process until the cosmetric close to one, and we go back to step one.
+\end{itemize}
 
 
 

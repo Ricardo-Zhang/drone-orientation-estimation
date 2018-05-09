@@ -1,6 +1,9 @@
 import numpy as np
 from pyquaternion import Quaternion
 import matplotlib.pyplot as plt
+from scipy.stats import norm
+from numpy import dot, sum, tile, linalg
+from numpy.linalg import inv
 from track_orientation import *
 
 c = 3e8
@@ -88,6 +91,7 @@ def main():
     for i in range(1,10):
         delta_theta = transition_theta_cal(base_mat,drone_stat[i - 1],satelite_a,satelite_b,
                                            model.doubleDiffRxTime[i,:,:])
+
         delta_quat = vec2quat(delta_theta)
         quaternion_est.append(delta_quat*quaternion_est[-1]+np.random.randn(4)*noise)
         delta_theta_forward = quat2vec(quaternion_est[-1])
@@ -104,9 +108,8 @@ for i in range(N):
     for j in range(rx_num-1):
      quaternion_measurement[i] = N[i][j]*satelite_a.wavelength+satelite_a.wavelength*Model.doubleDiffRxSate[i][j]
   
-# Karman filter 
-     from numpy import dot
- 
+# Karman filter
+
 #X : The mean state estimate of the previous step ( k −1). P : The state covariance of previous step ( k −1).
 #A : The transition n × n matrix.
 #Q : The process noise covariance matrix.
@@ -120,8 +123,7 @@ def kf_predict(X, P, A, Q, B, U):
 #IM : the Mean of predictive distribution of Y
 #IS : the Covariance or predictive mean of Y
 #LH : the Predictive probability (likelihood) of measurement which is computed using the Python function gauss_pdf
-from numpy import dot, sum, tile, linalg
-from numpy.linalg import inv
+
 
 def kf_update(X, P, Y, H, R): 
     IM = dot(H, X)
@@ -171,7 +173,6 @@ def particle(tau):
     for t in range(2,(tau+1)):
         #add x_pf[t] =x[t-1] state formular
     
-    from scipy.stats import norm
     #likelihood
         w_tlide = norm.pdf(y[t-1],loc=,scale=wavelength**2)
      #normalize
@@ -181,15 +182,13 @@ def particle(tau):
     m[t-1]=sum(w*x_pf[t])
     
     #resample step
-      s = numpy.random.choice(range(N), size=N, replace=True, p=w) 
+      s = np.random.choice(range(N), size=N, replace=True, p=w)
       x_pf =x_pf[s]
  return(m)       
 
    
  #  use Karman or particle
- import math
- 
-    if math.cos(2*math.pi*sum(N))> 5.6:
+    if np.cos(2*math.pi*sum(N))> 5.6:
     #kalman filter
 else:
     # particle filter
