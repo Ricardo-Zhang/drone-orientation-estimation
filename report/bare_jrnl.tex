@@ -584,16 +584,15 @@ multipath and hardware noise error.
   \lambda\phi_i^s = \rho_i^s + ct_i - ct^s + A^s - N_i^s
   \label{phase-model}
 \end{equation}
-where $N_i^s$ is the number of full wavelengths in the range which we could not
-solve from the phase measurement. The unknown property of $N_i^s$ is called as
-"integer ambiguity" and estimating the integer ambiguity is one of our major
+One advantage of carrier phase is that its changes over time can be tracked reliably by utilizing the doppler shift in the signal.While $N_i^s$ is Integer Ambiguity，the number of whole cycles on the path from satellite to receiver.[3] The unknown property of $N_i^s$ is called as
+solve from the phase measurement, and estimating the integer ambiguity is one of our major
 concern in the SafetyNet implementation. More discussion on integer ambiguity
 would come in later sections.\\
 Environmental error sources in Equation 3 are correlated over short time periods
 and within small geographical areas (200 km). Thus, two GPS measurements across
 time can be subtracted (or differenced) to eliminate some of these factors.
 Similarly, simultaneous measurements from multiple GPS receivers can also be
-differenced. [29] This study propose 4 kind of differentials.
+differenced. [4] This study propose 4 kind of differentials.
 \subsubsection{Single Differential across Receivers ($SD_{ij}^s(t)$)}
 \begin{equation}
   \begin{split}
