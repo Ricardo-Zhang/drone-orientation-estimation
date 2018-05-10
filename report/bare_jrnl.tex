@@ -691,6 +691,13 @@ The measurement form would be further transformed in Extended Kalman Filter sect
 for system linearization.
 \section{Algorithms}
 \subsection{Extended Kalman Filter}
+\begin{figure}
+  \centering
+  \captionsetup{justification=centering}
+  \includegraphics[width=0.6\textwidth]{fig/kalman.png}
+  \caption{Kalman Filter}
+  \label{kalman}
+\end{figure}
 Referring back to equation \ref{transition}, the transition function is intrinsically
 a nonlinear operation (the quaternion multiplication),
 we make linearized approximations using Extended Kalman Filter (EKF).
@@ -764,13 +771,7 @@ optimized solution $q_{coarse}$ to maximize the cosmetric value.
 \item After maximization, we update the previous q with $q_{coarse}$, and go back to step 2.
 \end{itemize}
 The system diagram is shown in figure \ref{kalman}.
-\begin{figure}
-  \centering
-  \captionsetup{justification=centering}
-  \includegraphics[width=0.6\textwidth]{fig/kalman.png}
-  \caption{Kalman Filter}
-  \label{kalman}
-\end{figure}
+
 \subsection{Advanced Particle Filter}
 there exists one phenomenon called cycle slips, A cycle slips causes a jump in
 carrier-phase measurements when the receiver phase tracking loops experience a
