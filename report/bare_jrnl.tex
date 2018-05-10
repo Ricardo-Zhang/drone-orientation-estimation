@@ -837,28 +837,25 @@ as constant.\\
 The Kalman and Advanced Particle filters are performed on the simulated data.\\
 
 \section{Real World Applications}
-With the booming applications with unmanned autonomos vechicle, reliable orientation
-estimation has been a nontrivial concern. SafetyNet proposes the novel algorithm
-to track the orientation with multiple GPS receivers to promise an error of 2 degrees
-in environment where magnetic interference and acceleration error accumulates.\\
-The reliablity and the accuracy of SafetyNet make it suitable in two major areas of
-applications.\\
-\paragraph{Reliablity} in the estimation makes it suitable for large quatercopters in aggressive
-flying status and in highly interfered magnetic field. Typical applications include
-flying in urban area (interference in magnetic field), obstacle avoidance in high
-speed flight (error in accelerometers), etc. \\
-\paragraph{Accuracy} in orientation estimation powers up the accuracy in
-autonomos controll algorithms. For example, accurate tracking of the camera pose make it possible
-to achieve better vision-based antonomos flying. 3D reconstruction from the drone's
-lens is another application benefits from the accuracy.
-
+With the booming increase in the applications of unmanned autonomous vehicles, reliable orientation estimation has become an important and necessary concern. SafetyNet proposes the novel algorithm to track the orientation with multiple GPS receivers to promise an error of two
+degrees in the environment where magnetic interferences and acceleration errors accumulate.\\
+The reliability and the accuracy of SafetyNet makes it suitable in two major areas of applications.\\
+\paragraph{Reliablity} The estimation in this study makes reliability suitable for large quatercopters in aggressive flying statuses and in highly interfered
+magnetic fields. Typical applications include flying in urban areas (interference in magnetic fields), obstacle avoidance in high
+speed flights (errors in accelerometers), etc. \\
+\paragraph{Accuracy} The orientation estimation in this study powers up the accuracy in autonomous control algorithms. Thus, SafetyNet can increase the accuracy of the application of UAV. For example, accurate
+tracking of the camera pose makes it possible to achieve better vision-based antonomos flying. 3D reconstruction from the
+drone’s lens is another application that benefits from the accuracy.
 \section{Conclusion}
 
-SafeNet use differential techniques, culminating in a novel particle filter framework running over multi-GNSS systems (GPS, GLONASS, and SBAS) to accurately computing the relative locations between each receiver pair, and translating these measurements into the drone’s 3D orientation.Results from 11 sessions of 5-7 minute flights report median orientation accuracies of 2  even under overcast weather conditions. The two filtering algorism used in the paper are Kalman filter and particle filter, we compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters
-and Advanced Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight,
-Advanced Particle Filters can better track the drone than Kalman Filter. And after the highly aggressive flight,
-Kalman Fliter has large deviation, while Advanced Particle Filters still performs well.
-The reason can be listed as below:
+SafeNet uses differential techniques, culminating in a novel particle filter framework running over multi-GNSS systems
+(GPS, GLONASS, and SBAS) to accurately compute the relative locations between each receiver pair and then to translate these
+measurements into the drone's 3D orientation. Results from eleven sessions of five to seven minute flights report median orientation accuracies
+of 2 even under overcast weather conditions. The two filtering algorism used in the paper are Kalman filter and particle filter, we
+compared the performance of Kalman Filters and Advanced Particle Filter. The performance of Kalman Filters and Advanced
+Particle Filters is similar with less aggressive flight, when comes in to highly aggressive flight, Advanced Particle Filters can
+better track the drone than Kalman Filter. And after the highly aggressive flight, Kalman Fliter has large deviation, while
+Advanced Particle Filters still performs well. The reason can be listed as below:
 \begin{itemize}
 \item SafetyNet adopts a hybrid approach to satisfy the linearity and Gaussian assumptions required for Kalman Filter.
 \item Missing data in one or more of the receivers derails the state transition function.
