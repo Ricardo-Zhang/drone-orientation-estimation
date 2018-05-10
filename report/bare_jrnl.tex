@@ -520,11 +520,9 @@ hardware.[2]
 
 \section{Problem Formulation}
 \subsection{Drone Model}
-In this study, the drone is modelled with 4 GPS receivers installed on its 4 arms
-with a distance of 10 centimeters to the center.
-Therefore, a baseline matrix is generated as shown in figure \ref{drone} to
+In this study, the drone is modeled with four GPS receivers installed on its four arms with a distance of ten centimeters to the center. Therefore, a baseline matrix is generated, as shown in figure \ref{drone} to
 model the ground truth relation between different receivers at different states.\\
-The baseline matrix has the form:
+The baseline matrix has the formula::
 \begin{equation}
   B = \begin{bmatrix}\rho_{41}& \rho_{42}& \rho_{43}\end{bmatrix}
 \end{equation}
@@ -540,23 +538,19 @@ where $\rho_{ij}$ is the vector between receiver $i$ and $j$
   \label{drone}
 \end{figure}
 \subsection{Pseudorange}
-Generally, the GPS operates in measuring the the time difference between transmitter
-and receive人， also the Pseudorange, which is the estimated distance between both ends
-is formed as in equation \ref{p-range}.
+Generally, the GPS operates in measuring the the time difference between the transmitters and receiving their pseudo-ranges,
+which are the estimated distances between both ends as shown in equation \ref{p-range}.
 \begin{equation}
   Pseudorange = ToF * c
   \label{p-range}
 \end{equation}
 where $ToF$ is the time difference and $c$ represents the speed of light.\\
-However, when a satellite transmits a signal, it includes clock error as the starting time
-of transmission is obtained from its atomic clock. The reception time of the
-ground receiver is also recorded by less accurate local clock. Because the clock
-of a typical GPS receiver is not synchronized to the GPS satellites.
-The resulting error can be up to 300 km. GPS signal can get delayed when it enters
-the Earth’s atmosphere because of refractions in the Ionosphere and Troposphere.
-When signal passes through a multipath channel, more errors would be introduced.
-In this study, we model the error in pseudorange at receiver $i$ from the satellite
-$s$ as in equation \ref{Pseudorange-model}.
+However, when a satellite transmits a signal, it includes clock error as the starting time of transmission which is obtained from its
+atomic clock. The reception time of the ground receiver is also recorded by a less accurate local clock, as the clock of a
+typical GPS receiver is not synchronized to the GPS satellites. The resulting error can be up to 300 km as a GPS signal can get
+delayed when it enters the Earths atmosphere because of refractions in the Ionosphere and the troposphere. When the signal passes
+through a multi-path channel, more errors would be introduced. In this study, the error was modeled in pseudo-range at receiver $i$
+from the satellite $s$ as shown in equation \ref{Pseudorange-model}.
 \begin{equation}
   Pseudorange_i^s = \rho_i^s + ct_i - ct^s + A^s + M_i + \epsilon_i^s
   \label{Pseudorange-model}
@@ -565,9 +559,8 @@ Here, $\rho_i^s$ represents the real range, $t_i$ and $t^s$ stand for the clock 
 the receiver and transmitter sides correspondingly. A models the interference by the
 atmosphere, $M_i$ stands for the multipath interference and $\epsilon_i^s$ represents
 the hardware noise in measuring.\\
-The operation error from the system would be as large as 1-4 meters which is far from
-satisfaction. Therefore, the Differential GPS technology is introduced leveraging
-the difference in signal phase and highly improves the system accuracy.\\
+The operation error from the system would be as large as one to four meters which is far from satisfactory measures. Thus, the Differential
+GPS technology is introduced to leverage the difference in the signal phase and therefore highly improving the system's accuracy.\\
 \subsection{Differential GPS}
 The differential GPS technology leverages the phase of received GPS signals to improve
 the accuracy. One advantage of carrier phase is that its changes over time can
@@ -834,15 +827,14 @@ The platform is shown in figure \ref{hector}.\\
   \caption{Hector Quatercopter Simulation Platform}
   \label{hector}
 \end{figure}
-Ground truth data of the location and orientation data is collected to simulate the
-multiple GPS receivers attached to the drone.\\
-4 GPS receivers are simulated on the 4 arms of the drone, rotated according to
-the ground truth orientation and shifted to the real location.\\
-Two satellites are fixed on the Medium Earth Orbit and the phases are simulated
-from the corresponding distance between the satellite and the receiver.\\
-As the drone's movement is relatively ignorable comparing to the distance to the
-satellites, the line-of-sight vector is considered as constant.\\
-The Kalman and Advanced Particle filters are performed on the simulated data.
+The ground truth data of the location and the orientation data is collected to simulate the multiple GPS receivers attached to the drone.\\
+4 GPS receivers are simulated on the 4 arms of the drone, rotated according to the ground truth orientation and shifted to the
+real location.\\
+Two satellites are fixed on the Medium Earth Orbit and the phases are simulated from the corresponding distance between the
+satellite and the receiver.\\
+As the drone’s movement is relatively ignorable comparing to the distance to the satellites, the line-of-sight vector is considered
+as constant.\\
+The Kalman and Advanced Particle filters are performed on the simulated data.\\
 
 \section{Real World Applications}
 With the booming applications with unmanned autonomos vechicle, reliable orientation
