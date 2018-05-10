@@ -481,24 +481,17 @@ Thus, many inertial measurement units (IMUs) were installed in an attempt to fix
 An IMU is an electronic device that measures and reports a body’s specific force and angular rate as well as the magnetic field
 surrounding the body, using a combination of accelerometers and gyroscopes and sometimes magnetometers too.\\
 IMUs are typically used to maneuver aircraft, including unmanned aerial vehicles
-(UAVs), among many others, and spacecraft, including satellites and landers.
+(UAVs), among many others, and spacecraft, including satellites and landers.\\
 Recent developments allow for the production of IMU-enabled GPS devices[1], in which the IMU allows the GPS receiver to work when GPS-signals are unavailable, such as in tunnels and inside buildings as well as when electronic
 interference is present. Unfortunately, the redundancy of IMU installations creates issues that result in unreliable hardware. Various noise sources, including
 motor vibrations, electromagnetic interferences, and ambient ferromagnetic influences, provided unreliable recordings for the IMU. Worse, the errors would accumulate over time, causing the IMUs to be prone to various types of correlated failures.
 This paper introduces the development SafetyNet, which is a fail-safe mechanism for IMU failures. The basic idea is to use multiple GPS units to track the 3D orientation of the UAV. The SafetyNet design includes four GPS receivers at four arms of a single drone upon IMU
-failure. This design utilizes these GPS receivers to estimate the drone's 3D orientation.
+failure. This design utilizes these GPS receivers to estimate the drone's 3D orientation.\\
 As an alternative to the IMUs, SafetyNet uses GPS signals to estimate the real time orientation of the drone without any
-inertial or magnetometer assistance. Chanllenge (is this a reference?) states that the traditional GPS system has an error of around 2 to 3 meters, and
+inertial or magnetometer assistance. Chanllenge states that the traditional GPS system has an error of around 2 to 3 meters, and
 the more advanced Differential GPS technology would still have a relative error in the scale of 10 to 20 centimeters (which
 equals to 20 degrees in orientation). However, relative GPS signal information can still provide data for analysis, and this study utilizes the
 spatio-temporal information to achieve better accuracy.\\
-As an alternative to the IMUs, SafetyNet uses GPS signals to estimate the real time
-orientation of the drone without any inertial or magnetometer assistance.
-Chanllenge comes that the traditional GPS system gets an error around $2~3$ meters
-and the more advanced Differential GPS technology would still have a relative error
-in the scale of $10~20$ centimeters (which equals to 20 degree in orientation).
-However, opportunities exist in relative GPS signal information and this paper utilize
-the spatio-temporal information to achieve better accuracy.\\
 The core aspects of the SafetyNet design can be distilled as follows::
 \begin{itemize}
   \item Manipulate measurements across pairs of GPS receivers, satellites, and consecutive time points and capture the 3D orientation
